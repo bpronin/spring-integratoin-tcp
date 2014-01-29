@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:int="http://www.springframework.org/schema/integration"
+       xmlns:int-ip="http://www.springframework.org/schema/integration/ip"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd http://www.springframework.org/schema/integration/ip http://www.springframework.org/schema/integration/ip/spring-integration-ip.xsd">
+
+    <int:channel id="input"/>
+
+    <int-ip:tcp-connection-factory id="tcp.server"
+                                   type="server"
+                                   port="7101"
+                                   single-use="true"
+                                   using-nio="true"
+            />
+    <!--deserializer="javaDeserializer"-->
+    <!--serializer="javaSerializer"-->
+
+    <!--<int-ip:tcp-inbound-gateway id="tcpInGateway"-->
+                                <!--connection-factory="tcpServer"-->
+                                <!--request-channel="input"-->
+                                <!--error-channel="errorChannel"-->
+            <!--/>-->
+
+    <int-ip:tcp-inbound-channel-adapter id="inboundServer"
+                                        channel="client.input"
+                                        connection-factory="tcp.server"/>
+
+    <bean id="receiver" class="bo.Printer"/>
+
+    <int:service-activator input-channel="client.input" ref="receiver" method="process"/>
+
+    <!--<bean id="javaSerializer"-->
+          <!--class="org.springframework.core.serializer.DefaultSerializer"/>-->
+
+    <!--<bean id="javaDeserializer"-->
+          <!--class="org.springframework.core.serializer.DefaultDeserializer"/>-->
+
+</beans>
