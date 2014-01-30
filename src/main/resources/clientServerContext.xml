@@ -11,17 +11,17 @@
     <bean id="javaDeserializer"
           class="org.springframework.core.serializer.DefaultDeserializer"/>
 
-    <bean id="printer" class="bo.comm.Printer"/>
-
     <bean id="generator" class="bo.comm.Generator" init-method="start">
         <constructor-arg ref="gateway"/>
     </bean>
 
-    <int:gateway id="gateway" service-interface="bo.comm.Service" default-request-channel="input"/>
+    <!-- Client side -->
+
+    <int:gateway id="gateway" service-interface="bo.comm.Service" default-request-channel="clientInput"/>
 
     <int:channel id="clientInput"/>
 
-    <int-ip:tcp-connection-factory id="clientFactory"
+    <int-ip:tcp-connection-factory id="client"
                                    type="client"
                                    host="localhost"
                                    port="7101"
@@ -30,23 +30,23 @@
                                    serializer="javaSerializer"
             />
 
-    <int-ip:tcp-outbound-channel-adapter id="client"
-                                         channel="input"
-                                         connection-factory="client"/>
+    <int-ip:tcp-outbound-channel-adapter channel="clientInput" connection-factory="client"/>
 
-    <int-ip:tcp-connection-factory id="serverFactory"
+    <!-- Server side -->
+
+    <int-ip:tcp-connection-factory id="server"
                                    type="server"
                                    port="7101"
                                    deserializer="javaDeserializer"
                                    serializer="javaSerializer"
             />
 
-    <int-ip:tcp-inbound-channel-adapter id="serverAdapter"
-                                        channel="input"
-                                        connection-factory="server"/>
+    <int-ip:tcp-inbound-channel-adapter channel="serverInput" connection-factory="server"/>
 
     <int:channel id="serverInput"/>
 
-    <int:service-activator ref="printer" method="process" input-channel="input"/>
+    <bean id="printer" class="bo.comm.Printer"/>
+
+    <int:service-activator ref="printer" method="process" input-channel="serverInput"/>
 
 </beans>
