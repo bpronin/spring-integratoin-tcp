@@ -7,10 +7,10 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  *
  * @author Boris Pronin (<a href="mailto:bpronin@bttprime.com">bpronin@bttprime.com</a>)
  */
-public class ClientServerApp {
+public class ClientServerGatewaysApp {
 
     public static void main(String[] args) throws Exception {
-        new ClassPathXmlApplicationContext("clientServerContext.xml");
+        new ClassPathXmlApplicationContext("clientServerGatewayContext.xml");
 
 //        new ClassPathXmlApplicationContext("clientContext.xml");
 //        new ClassPathXmlApplicationContext("serverContext.xml");

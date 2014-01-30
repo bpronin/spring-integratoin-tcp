@@ -18,16 +18,28 @@ public class Generator {
     }
 
     public void start() {
+/*
+        Executors.newSingleThreadScheduledExecutor().schedule(new Runnable() {
+            @Override
+            public void run() {
+                long start = System.currentTimeMillis();
+                for (int i = 0; i < 1000; i++) {
+                    send(i);
+                }
+                System.out.println(System.currentTimeMillis() - start);
+            }
+        }, 100, TimeUnit.MILLISECONDS);
+*/
+
         Executors.newSingleThreadScheduledExecutor().scheduleWithFixedDelay(new Runnable() {
             @Override
             public void run() {
-                send();
+                send(new Date());
             }
         }, 1000, 500, TimeUnit.MILLISECONDS);
     }
 
-    private void send() {
-        Object message = new Date();
+    private void send(Object message) {
         try {
             System.out.println("sending:" + message);
             service.process(message);

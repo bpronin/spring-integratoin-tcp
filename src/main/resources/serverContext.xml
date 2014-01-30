@@ -28,6 +28,18 @@
                                    serializer="javaSerializer"
             />
 
+<!-- slow
+    <int-ip:tcp-connection-factory id="client"
+                                   type="client"
+                                   host="localhost"
+                                   port="7101"
+                                   so-timeout="2000"
+                                   single-use="true"
+                                   deserializer="javaDeserializer"
+                                   serializer="javaSerializer"
+            />
+-->
+
     <int-ip:tcp-outbound-channel-adapter channel="input" connection-factory="client"/>
 
 </beans>

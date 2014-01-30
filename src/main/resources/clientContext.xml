@@ -18,6 +18,16 @@
                                    serializer="javaSerializer"
             />
 
+<!-- slow
+    <int-ip:tcp-connection-factory id="server"
+                                   type="server"
+                                   port="7101"
+                                   single-use="true"
+                                   deserializer="javaDeserializer"
+                                   serializer="javaSerializer"
+            />
+-->
+
     <int-ip:tcp-inbound-channel-adapter channel="input" connection-factory="server"/>
 
     <int:channel id="input"/>
