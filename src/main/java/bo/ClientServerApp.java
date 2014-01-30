@@ -10,9 +10,10 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 public class ClientServerApp {
 
     public static void main(String[] args) throws Exception {
-//        new ClassPathXmlApplicationContext("clientContext.xml");
-//        new ClassPathXmlApplicationContext("serverContext.xml");
-        new ClassPathXmlApplicationContext("testContext.xml");
+//        new ClassPathXmlApplicationContext("clientServerContext.xml");
+
+        new ClassPathXmlApplicationContext("clientContext.xml");
+        new ClassPathXmlApplicationContext("serverContext.xml");
     }
 
 }

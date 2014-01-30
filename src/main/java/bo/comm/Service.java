@@ -1,4 +1,4 @@
-package bo;
+package bo.comm;
 
 /**
  * Interface Server.

@@ -1,4 +1,4 @@
-package bo;
+package bo.comm;
 
 import java.util.Date;
 import java.util.concurrent.Executors;
@@ -11,10 +11,10 @@ import java.util.concurrent.TimeUnit;
  */
 public class Generator {
 
-    private Service gateway;
+    private Service service;
 
     public Generator(Service service) {
-        this.gateway = service;
+        this.service = service;
     }
 
     public void start() {
@@ -27,11 +27,10 @@ public class Generator {
     }
 
     private void send() {
-        Date message = new Date();
-        System.out.println("sending:" + message);
-
+        Object message = new Date();
         try {
-            gateway.process(message.toString());
+            System.out.println("sending:" + message);
+            service.process(message);
             System.out.println("sent:" + message);
         } catch (Exception x) {
             x.printStackTrace();
