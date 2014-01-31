@@ -36,14 +36,14 @@ public class Generator {
             public void run() {
                 send(new Date());
             }
-        }, 1000, 500, TimeUnit.MILLISECONDS);
+        }, 1000, 1000, TimeUnit.MILLISECONDS);
     }
 
     private void send(Object message) {
         try {
-            System.out.println("sending:" + message);
+//            System.out.println("GENERATOR: sending:" + message);
             service.process(message);
-            System.out.println("sent:" + message);
+            System.out.println("GENERATOR: sent:" + message);
         } catch (Exception x) {
             x.printStackTrace();
         }

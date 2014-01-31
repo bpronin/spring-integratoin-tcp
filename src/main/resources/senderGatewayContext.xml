@@ -15,9 +15,15 @@
 
     <!-- Client side -->
 
-    <int:gateway id="gateway" service-interface="bo.comm.Service" default-request-channel="input"/>
+    <int:gateway id="gateway" service-interface="bo.comm.Service" default-request-channel="clientInput"/>
 
-    <int:channel id="input"/>
+    <int:channel id="clientInput"/>
+
+    <int:channel id="replyChannel"/>
+
+    <bean id="replyPrinter" class="bo.comm.Printer"/>
+
+    <int:service-activator ref="replyPrinter" method="process" input-channel="replyChannel"/>
 
     <int-ip:tcp-connection-factory id="client"
                                    type="client"
@@ -28,23 +34,7 @@
                                    serializer="javaSerializer"
             />
 
-    <int-ip:tcp-outbound-channel-adapter channel="input" connection-factory="client"/>
-
-    <!-- Server side -->
-
-    <int-ip:tcp-connection-factory id="server"
-                                   type="server"
-                                   port="7101"
-                                   deserializer="javaDeserializer"
-                                   serializer="javaSerializer"
-            />
-
-    <int-ip:tcp-inbound-channel-adapter channel="output" connection-factory="server"/>
-
-    <int:channel id="output"/>
-
-    <bean id="printer" class="bo.comm.Printer"/>
-
-    <int:service-activator ref="printer" method="process" input-channel="output"/>
+    <int-ip:tcp-outbound-gateway request-channel="clientInput" reply-channel="replyChannel"
+                                 connection-factory="client"/>
 
 </beans>

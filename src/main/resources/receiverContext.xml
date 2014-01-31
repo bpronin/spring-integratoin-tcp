@@ -5,11 +5,9 @@
        xmlns:int-ip="http://www.springframework.org/schema/integration/ip"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd http://www.springframework.org/schema/integration/ip http://www.springframework.org/schema/integration/ip/spring-integration-ip.xsd">
 
-    <bean id="javaSerializer"
-          class="org.springframework.core.serializer.DefaultSerializer"/>
+    <bean id="javaSerializer" class="org.springframework.core.serializer.DefaultSerializer"/>
 
-    <bean id="javaDeserializer"
-          class="org.springframework.core.serializer.DefaultDeserializer"/>
+    <bean id="javaDeserializer" class="org.springframework.core.serializer.DefaultDeserializer"/>
 
     <int-ip:tcp-connection-factory id="server"
                                    type="server"
@@ -18,15 +16,15 @@
                                    serializer="javaSerializer"
             />
 
-<!-- slow
-    <int-ip:tcp-connection-factory id="server"
-                                   type="server"
-                                   port="7101"
-                                   single-use="true"
-                                   deserializer="javaDeserializer"
-                                   serializer="javaSerializer"
-            />
--->
+    <!-- slow
+        <int-ip:tcp-connection-factory id="server"
+                                       type="server"
+                                       port="7101"
+                                       single-use="true"
+                                       deserializer="javaDeserializer"
+                                       serializer="javaSerializer"
+                />
+    -->
 
     <int-ip:tcp-inbound-channel-adapter channel="input" connection-factory="server"/>
 

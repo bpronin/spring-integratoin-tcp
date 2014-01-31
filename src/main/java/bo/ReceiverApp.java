@@ -7,10 +7,11 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  *
  * @author Boris Pronin (<a href="mailto:bpronin@bttprime.com">bpronin@bttprime.com</a>)
  */
-public class ClientApp {
+public class ReceiverApp {
 
     public static void main(String[] args) throws Exception {
-        new ClassPathXmlApplicationContext("clientContext.xml");
+//        new ClassPathXmlApplicationContext("receiverContext.xml");
+        new ClassPathXmlApplicationContext("receiverGatewayContext.xml");
         System.in.read();
     }
 }
