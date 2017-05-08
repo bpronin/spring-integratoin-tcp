@@ -14,12 +14,7 @@ public class Printer {
     }
 
     public void process(Object message) {
-        System.out.println(prefix + "received: " + message);
-    }
-
-    public String processAndReply(Object message) {
-        System.out.println(prefix + "received: " + message);
-        return "ok";
+        System.out.println(prefix + ": received: " + message);
     }
 
 }

@@ -1,8 +1,11 @@
 package bo.comm;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Class Generator.
@@ -11,10 +14,21 @@ import java.util.concurrent.TimeUnit;
  */
 public class Generator {
 
+    private static final int MAX_ITERATIONS = 2;
     private Service service;
+    private String prefix;
+    private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     public Generator(Service service) {
         this.service = service;
+    }
+
+    public String getPrefix() {
+        return prefix;
+    }
+
+    public void setPrefix(String prefix) {
+        this.prefix = prefix;
     }
 
     public void start() {
@@ -30,11 +44,17 @@ public class Generator {
             }
         }, 100, TimeUnit.MILLISECONDS);
 */
+        final AtomicInteger iteration = new AtomicInteger();
+        final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+        executor.scheduleWithFixedDelay(new Runnable() {
 
-        Executors.newSingleThreadScheduledExecutor().scheduleWithFixedDelay(new Runnable() {
             @Override
             public void run() {
-                send(new Date());
+                send(format.format(new Date()));
+                if (iteration.incrementAndGet() >= MAX_ITERATIONS){
+                    //executor.shutdown();
+                    System.exit(0);
+                }
             }
         }, 1000, 1000, TimeUnit.MILLISECONDS);
     }
@@ -43,7 +63,7 @@ public class Generator {
         try {
 //            System.out.println("GENERATOR: sending:" + message);
             service.process(message);
-            System.out.println("GENERATOR: sent:" + message);
+            System.out.println(prefix + ": sent:" + message);
         } catch (Exception x) {
             x.printStackTrace();
         }

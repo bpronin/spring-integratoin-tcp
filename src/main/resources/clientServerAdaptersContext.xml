@@ -9,15 +9,16 @@
 
     <bean id="javaDeserializer" class="org.springframework.core.serializer.DefaultDeserializer"/>
 
-    <bean id="generator" class="bo.comm.Generator" init-method="start">
-        <constructor-arg ref="gateway"/>
-    </bean>
-
     <!-- Client side -->
 
-    <int:gateway id="gateway" service-interface="bo.comm.Service" default-request-channel="input"/>
+    <bean id="clientRequestGenerator" class="bo.comm.Generator" init-method="start">
+        <constructor-arg ref="gatewayToServer"/>
+        <property name="prefix" value="CLIENT"/>
+    </bean>
 
-    <int:channel id="input"/>
+    <int:gateway id="gatewayToServer" service-interface="bo.comm.Service" default-request-channel="toServer"/>
+
+    <int:channel id="toServer"/>
 
     <int-ip:tcp-connection-factory id="client"
                                    type="client"
@@ -28,7 +29,7 @@
                                    serializer="javaSerializer"
             />
 
-    <int-ip:tcp-outbound-channel-adapter channel="input" connection-factory="client"/>
+    <int-ip:tcp-outbound-channel-adapter channel="toServer" connection-factory="client"/>
 
     <!-- Server side -->
 
@@ -39,12 +40,14 @@
                                    serializer="javaSerializer"
             />
 
-    <int-ip:tcp-inbound-channel-adapter channel="output" connection-factory="server"/>
+    <int-ip:tcp-inbound-channel-adapter channel="fromClient" connection-factory="server"/>
 
-    <int:channel id="output"/>
+    <int:channel id="fromClient"/>
 
-    <bean id="printer" class="bo.comm.Printer"/>
+    <bean id="serverRequestHandler" class="bo.comm.Printer">
+        <property name="prefix" value="SERVER"/>
+    </bean>
 
-    <int:service-activator ref="printer" method="process" input-channel="output"/>
+    <int:service-activator ref="serverRequestHandler" method="process" input-channel="fromClient"/>
 
 </beans>

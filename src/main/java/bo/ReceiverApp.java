@@ -11,7 +11,7 @@ public class ReceiverApp {
 
     public static void main(String[] args) throws Exception {
 //        new ClassPathXmlApplicationContext("receiverContext.xml");
-        new ClassPathXmlApplicationContext("receiverGatewayContext.xml");
+//        new ClassPathXmlApplicationContext("receiverGatewayContext.xml");
         System.in.read();
     }
 }
