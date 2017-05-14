@@ -9,11 +9,13 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  *
  * @author Boris Pronin (<a href="mailto:bpronin@bttprime.com">bpronin@bttprime.com</a>)
  */
-public class ClientServerGatewaysApp {
+public class PullerApp {
 
     public static void main(String[] args) throws Exception {
         ((Jdk14Logger) LogFactory.getLog("org.springframework")).getLogger().setLevel(java.util.logging.Level.WARNING);
-        new ClassPathXmlApplicationContext("clientServerGatewayContext2.xml");
+//        new ClassPathXmlApplicationContext("pullerContext.xml");
+        new ClassPathXmlApplicationContext("receiverClientContext.xml");
+        new ClassPathXmlApplicationContext("senderServerContext.xml");
     }
 
 }

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:int="http://www.springframework.org/schema/integration"
+       xmlns:int-ip="http://www.springframework.org/schema/integration/ip"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd   http://www.springframework.org/schema/integration/ip http://www.springframework.org/schema/integration/ip/spring-integration-ip.xsd">
+
+    <bean id="javaSerializer" class="org.springframework.core.serializer.DefaultSerializer"/>
+
+    <bean id="javaDeserializer" class="org.springframework.core.serializer.DefaultDeserializer"/>
+
+    <!-- Client side -->
+    <bean id="clientRequestHandler" class="bo.comm.Printer">
+        <property name="prefix" value="CLIENT"/>
+    </bean>
+
+    <int:service-activator ref="clientRequestHandler" method="process" input-channel="fromServer"/>
+
+    <int:channel id="fromServer"/>
+
+    <int-ip:tcp-connection-factory id="client"
+                                   type="client"
+                                   host="localhost"
+                                   port="7101"
+                                   single-use="false"
+                                   so-timeout="2000"
+                                   deserializer="javaDeserializer"
+                                   serializer="javaSerializer"
+    />
+
+    <int-ip:tcp-inbound-channel-adapter channel="fromServer" connection-factory="client" client-mode="true"/>
+
+    <!-- Server side -->
+
+    <int-ip:tcp-connection-factory id="server"
+                                   type="server"
+                                   port="7101"
+                                   deserializer="javaDeserializer"
+                                   serializer="javaSerializer"
+            />
+
+    <!--<int-ip:tcp-inbound-channel-adapter channel="fromClient" connection-factory="server"/>-->
+
+    <!--<int:channel id="fromClient"/>-->
+
+    <!--<bean id="serverRequestHandler" class="bo.comm.Printer">-->
+        <!--<property name="prefix" value="SERVER"/>-->
+    <!--</bean>-->
+
+    <!--<int:service-activator ref="serverRequestHandler" method="process" input-channel="fromClient"/>-->
+
+    <int-ip:tcp-outbound-channel-adapter channel="toClient" connection-factory="server"/>
+
+    <bean id="serverRequestGenerator" class="bo.comm.Generator" init-method="start">
+        <constructor-arg ref="gatewayToClient"/>
+        <property name="prefix" value="SERVER"/>
+    </bean>
+
+    <int:gateway id="gatewayToClient" service-interface="bo.comm.Service" default-request-channel="toClient"/>
+
+    <int:channel id="toClient"/>
+
+</beans>

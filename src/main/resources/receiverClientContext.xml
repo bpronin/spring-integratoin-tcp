@@ -32,7 +32,9 @@
 
     <int-ip:tcp-inbound-channel-adapter channel="output" connection-factory="client"/>
 
-    <bean id="printer" class="bo.comm.Printer"/>
+    <bean id="printer" class="bo.comm.Printer">
+        <property name="prefix" value="CLIENT"/>
+    </bean>
 
     <int:service-activator ref="printer" method="process" input-channel="output"/>
 

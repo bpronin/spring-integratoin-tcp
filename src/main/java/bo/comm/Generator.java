@@ -14,7 +14,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class Generator {
 
-    private static final int MAX_ITERATIONS = 2;
+    private int maxIterations = 3;
     private Service service;
     private String prefix;
     private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -23,8 +23,8 @@ public class Generator {
         this.service = service;
     }
 
-    public String getPrefix() {
-        return prefix;
+    public void setMaxIterations(int maxIterations) {
+        this.maxIterations = maxIterations;
     }
 
     public void setPrefix(String prefix) {
@@ -51,9 +51,9 @@ public class Generator {
             @Override
             public void run() {
                 send(format.format(new Date()));
-                if (iteration.incrementAndGet() >= MAX_ITERATIONS){
-                    //executor.shutdown();
-                    System.exit(0);
+                if (iteration.incrementAndGet() >= maxIterations){
+                    executor.shutdown();
+//                    System.exit(0);
                 }
             }
         }, 1000, 1000, TimeUnit.MILLISECONDS);
@@ -61,9 +61,8 @@ public class Generator {
 
     private void send(Object message) {
         try {
-//            System.out.println("GENERATOR: sending:" + message);
-            service.process(message);
             System.out.println(prefix + ": sent:" + message);
+            service.process(message);
         } catch (Exception x) {
             x.printStackTrace();
         }
